@@ -1,34 +1,40 @@
+import 'dart:typed_data';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import 'main.dart';
 
 class NotificationService {
 
-  static final NotificationService _notificationService = NotificationService
-      ._internal();
-  static final _notifications = FlutterLocalNotificationsPlugin();
-
-  factory NotificationService() {
-    return _notificationService;
+  static Future<void> showNotification(String msg) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails('your channel id', 'your channel name',
+        channelDescription: 'your channel description',
+        importance: Importance.max,
+        priority: Priority.high,
+        ticker: 'ticker');
+    const NotificationDetails platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+        0, 'plain title', msg, platformChannelSpecifics,
+        payload: 'item x');
   }
 
-  NotificationService._internal();
-
-  static Future showNotifications({
-    int id = 0,
-    String? title,
-    String? body,
-    String? payload,
-  }) async => _notifications.show(id, title, body, _notificationDetails(), payload: payload);
-
-  static NotificationDetails? _notificationDetails() {
-    return const NotificationDetails(
-      android: AndroidNotificationDetails(
-          'channel id',
-          'channel name',
-        channelDescription: 'channel description',
-        importance: Importance.max
-      ),
-      iOS: IOSNotificationDetails()
-    );
+  static Future<void> showInsistentNotification(String msg) async {
+    // This value is from: https://developer.android.com/reference/android/app/Notification.html#FLAG_INSISTENT
+    const int insistentFlag = 4;
+    final AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails('your channel id', 'your channel name',
+        channelDescription: 'your channel description',
+        importance: Importance.max,
+        priority: Priority.high,
+        ticker: 'ticker',
+        additionalFlags: Int32List.fromList(<int>[insistentFlag]));
+    final NotificationDetails platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+        0, 'insistent title', msg, platformChannelSpecifics,
+        payload: 'item x');
   }
 
 }

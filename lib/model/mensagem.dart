@@ -1,15 +1,18 @@
-class Mensagem {
-  String? name;
+class ChatMessage {
+  String? content;
+  String? sender;
 
-  Mensagem({this.name});
+  ChatMessage({this.content, this.sender});
 
-  Mensagem.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
+  ChatMessage.fromJson(Map<String, dynamic> json) {
+    content = json['content'];
+    sender = json['sender'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
+    data['content'] = this.content;
+    data['sender'] = this.sender;
     return data;
   }
 }

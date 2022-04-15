@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_websocket/websocket/websocket_chat.dart';
+import 'package:provider/provider.dart';
 
 import 'pages/main/main_page.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -64,7 +66,14 @@ Future<void> main() async {
   //-----
 
 
-  runApp(const MyApp());
+  runApp(
+      MultiProvider(
+        providers: [
+          Provider(create: (_) => WebsocketChat()),
+        ],
+        child: const MyApp(),
+      ),
+      );
 }
 
 class MyApp extends StatelessWidget {
